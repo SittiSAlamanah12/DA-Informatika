@@ -1,0 +1,8 @@
+{
+  "name": "Asesmen Harian Informatika Kelas VII",
+  "description": "Aplikasi CBT Asesmen Harian Informatika Kelas VII SMP dengan 10 soal pilihan ganda, 5 essay otomatis, deteksi kecurangan anti-pindah tab, penguncian layar, dan dashboard guru.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
