@@ -33,22 +33,22 @@ const initialSampleSubmissions = [
       essay: {
         1: "Data yang diperlukan: nama kegiatan harian, waktu pelaksanaan (jam dan hari), tempat berlangsungnya acara, penanggung jawab, serta perlengkapan.",
         2: "Langkah-langkah: 1) Membuat daftar seluruh kegiatan harian. 2) Menentukan skala prioritas. 3) Mengatur alokasi waktu dan istirahat. 4) Menyusun secara teratur dan konsisten mengevaluasi.",
-        3: "Jenis buku yang paling banyak terjual adalah Buku Novel dengan total 520 buku (120+100+140+160=520). Sedangkan buku pelajaran 340 dan cerita anak 220.",
-        4: "Penjualan buku novel bulan April = 160. Peningkatan 20% = 32 buku. Maka perkiraan penjualan bulan Mei = 160 + 32 = 192 buku.",
-        5: "Buku pelajaran meningkat pada bulan April karena siswa dan sekolah mempersiapkan Ujian Akhir Semester / PAT dan kenaikan kelas sehingga membutuhkan latihan soal."
+        3: "Fungsi dasar: SUM untuk menjumlahkan seluruh angka, COUNT untuk menghitung sel berisi angka, COUNTA untuk sel tidak kosong, SUMIF untuk menjumlahkan dengan kriteria tertentu, dan COUNTIF untuk menghitung jumlah sel dengan syarat kriteria.",
+        4: "Fungsi statistik: 1) AVERAGE untuk menghitung nilai rata-rata dari data angka. 2) MAX untuk mencari nilai angka tertinggi dalam rentang data. 3) MIN untuk mencari nilai terendah dari rentang data.",
+        5: "Fungsi logika: AND menghasilkan TRUE jika semua kondisi benar, OR menghasilkan TRUE jika minimal salah satu kondisi benar, dan NOT membalikkan nilai logika dari TRUE jadi FALSE atau sebaliknya."
       }
     },
     pgCorrectCount: 10,
     pgScore: 100,
-    essayScore: 98,
-    finalScore: 99,
+    essayScore: 100,
+    finalScore: 100,
     isPassed: true,
     essayEvaluations: [
       { questionId: 1, autoScore: 20, finalScore: 20, maxScore: 20, autoFeedback: "Sangat lengkap dan relevan." },
       { questionId: 2, autoScore: 20, finalScore: 20, maxScore: 20, autoFeedback: "Runtutan langkah sistematis." },
-      { questionId: 3, autoScore: 20, finalScore: 20, maxScore: 20, autoFeedback: "Perhitungan 520 tepat dan perbandingan jelas." },
-      { questionId: 4, autoScore: 20, finalScore: 20, maxScore: 20, autoFeedback: "Hitungan 192 eksemplar tepat." },
-      { questionId: 5, autoScore: 18, finalScore: 18, maxScore: 20, autoFeedback: "Analisis persiapan ujian sangat logis." }
+      { questionId: 3, autoScore: 20, finalScore: 20, maxScore: 20, autoFeedback: "Penjelasan kelima fungsi dasar sangat jelas." },
+      { questionId: 4, autoScore: 20, finalScore: 20, maxScore: 20, autoFeedback: "Penyebutan dan penjelasan 3 fungsi statistik sangat tepat." },
+      { questionId: 5, autoScore: 20, finalScore: 20, maxScore: 20, autoFeedback: "Penjelasan AND, OR, NOT dan kondisi TRUE/FALSE sangat akurat." }
     ],
     violations: [],
     violationCount: 0,

@@ -1,5 +1,65 @@
 [
   {
+    "id": "sub-1792334330295-bqxe07",
+    "studentName": "testing",
+    "studentClass": "VII Academic",
+    "studentNumber": "12",
+    "startedAt": "2026-10-18T14:38:50.295Z",
+    "finishedAt": "2026-10-18T14:39:01.401Z",
+    "durationSeconds": 11,
+    "answers": {
+      "pg": {},
+      "essay": {},
+      "markedDoubtful": {}
+    },
+    "pgCorrectCount": 0,
+    "pgScore": 0,
+    "essayScore": 0,
+    "finalScore": 0,
+    "isPassed": false,
+    "essayEvaluations": [
+      {
+        "questionId": 1,
+        "autoScore": 0,
+        "finalScore": 0,
+        "maxScore": 20,
+        "autoFeedback": "Jawaban kosong atau terlalu singkat untuk dinilai."
+      },
+      {
+        "questionId": 2,
+        "autoScore": 0,
+        "finalScore": 0,
+        "maxScore": 20,
+        "autoFeedback": "Jawaban kosong atau terlalu singkat untuk dinilai."
+      },
+      {
+        "questionId": 3,
+        "autoScore": 0,
+        "finalScore": 0,
+        "maxScore": 20,
+        "autoFeedback": "Jawaban kosong atau terlalu singkat untuk dinilai."
+      },
+      {
+        "questionId": 4,
+        "autoScore": 0,
+        "finalScore": 0,
+        "maxScore": 20,
+        "autoFeedback": "Jawaban kosong atau terlalu singkat untuk dinilai."
+      },
+      {
+        "questionId": 5,
+        "autoScore": 0,
+        "finalScore": 0,
+        "maxScore": 20,
+        "autoFeedback": "Jawaban kosong atau terlalu singkat untuk dinilai."
+      }
+    ],
+    "violations": [],
+    "violationCount": 0,
+    "status": "AUTO_SUBMITTED_VIOLATIONS",
+    "reviewedByTeacher": false
+  },
+  {
     "id": "sub-seed-001",
     "studentName": "Ahmad Rizky Pratama",
     "studentClass": "VII Academic",
@@ -23,9 +83,9 @@
       "essay": {
         "1": "Data yang diperlukan: nama kegiatan harian, waktu pelaksanaan (jam dan hari), tempat berlangsungnya acara, penanggung jawab, serta perlengkapan.",
         "2": "Langkah-langkah: 1) Membuat daftar seluruh kegiatan harian. 2) Menentukan skala prioritas. 3) Mengatur alokasi waktu dan istirahat. 4) Menyusun secara teratur dan konsisten mengevaluasi.",
-        "3": "Jenis buku yang paling banyak terjual adalah Buku Novel dengan total 520 buku (120+100+140+160=520). Sedangkan buku pelajaran 340 dan cerita anak 220.",
-        "4": "Penjualan buku novel bulan April = 160. Peningkatan 20% = 32 buku. Maka perkiraan penjualan bulan Mei = 160 + 32 = 192 buku.",
-        "5": "Buku pelajaran meningkat pada bulan April karena siswa dan sekolah mempersiapkan Ujian Akhir Semester / PAT dan kenaikan kelas sehingga membutuhkan latihan soal."
+        "3": "Fungsi dasar: SUM untuk menjumlahkan seluruh angka, COUNT untuk menghitung sel berisi angka, COUNTA untuk sel tidak kosong, SUMIF untuk menjumlahkan dengan kriteria tertentu, dan COUNTIF untuk menghitung jumlah sel dengan syarat kriteria.",
+        "4": "Fungsi statistik: 1) AVERAGE untuk menghitung nilai rata-rata dari data angka. 2) MAX untuk mencari nilai angka tertinggi dalam rentang data. 3) MIN untuk mencari nilai terendah dari rentang data.",
+        "5": "Fungsi logika: AND menghasilkan TRUE jika semua kondisi benar, OR menghasilkan TRUE jika minimal salah satu kondisi benar, dan NOT membalikkan nilai logika dari TRUE jadi FALSE atau sebaliknya."
       }
     },
     "pgCorrectCount": 10,

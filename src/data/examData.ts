@@ -236,72 +236,42 @@ export const ESSAY_QUESTIONS: EssayQuestion[] = [
   },
   {
     id: 3,
-    question: "Perhatikan tabel penjualan buku pada 4 bulan terakhir di bawah ini.\n\nBerdasarkan data tabel tersebut, jenis buku apa yang paling banyak terjual selama empat bulan? Jelaskan bagaimana kamu mendapatkan kesimpulan tersebut lengkap dengan perhitungannya!",
-    tableData: {
-      headers: ["Bulan", "Buku Novel", "Buku Pelajaran", "Buku Cerita Anak"],
-      rows: [
-        ["Januari", 120, 80, 50],
-        ["Februari", 100, 90, 60],
-        ["Maret", 140, 70, 40],
-        ["April", 160, 100, 70]
-      ],
-      caption: "Tabel 1.1: Data Rekap Penjualan Buku (Januari - April)"
-    },
-    sampleAnswer: "Jenis buku yang paling banyak terjual adalah Buku Novel.\nPerhitungan:\n- Total Buku Novel = 120 + 100 + 140 + 160 = 520 buku\n- Total Buku Pelajaran = 80 + 90 + 70 + 100 = 340 buku\n- Total Buku Cerita Anak = 50 + 60 + 40 + 70 = 220 buku\nKesimpulan didapat dengan menjumlahkan penjualan tiap jenis buku selama 4 bulan menggunakan konsep penjumlahan/SUM, di mana Buku Novel menempati angka penjualan tertinggi (520 eksemplar).",
-    keywords: ["novel", "520", "total", "penjumlahan", "jumlah", "pelajaran 340", "cerita 220"],
+    question: "Jelaskan fungsi dan kegunaan dari masing-masing rumus fungsi dasar lembar kerja (spreadsheet) berikut: SUM, COUNT, COUNTA, SUMIF, dan COUNTIF! Berikan pula penjelasan perbedaan cara kerjanya secara jelas!",
+    sampleAnswer: "Penjelasan rumus fungsi dasar spreadsheet:\n1) SUM: Berfungsi untuk menjumlahkan seluruh nilai angka (numerik) pada rentang sel yang dipilih (misal: =SUM(A1:A10)).\n2) COUNT: Berfungsi untuk menghitung banyaknya sel yang hanya berisi data numerik (angka).\n3) COUNTA: Berfungsi untuk menghitung banyaknya sel yang tidak kosong (berisi data apa pun, baik teks, angka, maupun simbol).\n4) SUMIF: Berfungsi untuk menjumlahkan data numerik pada sel yang memenuhi kriteria atau syarat tertentu (misal: menjumlahkan nilai siswa yang di atas 75).\n5) COUNTIF: Berfungsi untuk menghitung banyaknya sel yang memenuhi kriteria atau syarat tertentu (misal: menghitung jumlah siswa yang lulus).",
+    keywords: ["sum", "count", "counta", "sumif", "countif", "penjumlahan", "angka", "numerik", "tidak kosong", "kriteria", "syarat"],
     maxScore: 20,
     scoringGuide: {
-      fullCriteria: "Menyebutkan dengan tepat Buku Novel sebagai buku terlaris, disertai bukti total perhitungan (520) dan perbandingan dengan buku lain.",
-      partialCriteria: "Menyebutkan Buku Novel dengan benar namun hitungan total kurang lengkap, atau hanya menyebut angka tanpa jenis buku.",
-      minimalCriteria: "Jawaban salah atau hanya menyebutkan nama buku tanpa penjelasan perhitungan sama sekali."
+      fullCriteria: "Menjelaskan kelima fungsi dasar (SUM, COUNT, COUNTA, SUMIF, COUNTIF) dengan tepat dan membedakan fungsinya secara jelas.",
+      partialCriteria: "Menjelaskan 3-4 fungsi dengan benar.",
+      minimalCriteria: "Hanya menjelaskan 1-2 fungsi secara singkat."
     },
-    explanation: "Menguji keterampilan analisis data tabel dengan fungsi agregasi penjumlahan (SUM) dan penarikan kesimpulan data terbesar (MAX)."
+    explanation: "Menguji pemahaman fungsi kalkulasi agregasi dasar dan pemfilteran kriteria sel pada perkakas lembar kerja."
   },
   {
     id: 4,
-    question: "Berdasarkan tabel penjualan buku di atas, jika tren penjualan terus meningkat sebesar 20% setiap bulan untuk Buku Novel, berapakah perkiraan jumlah Buku Novel yang akan terjual pada bulan Mei? Tuliskan langkah perhitungannya!",
-    tableData: {
-      headers: ["Bulan", "Buku Novel", "Buku Pelajaran", "Buku Cerita Anak"],
-      rows: [
-        ["Januari", 120, 80, 50],
-        ["Februari", 100, 90, 60],
-        ["Maret", 140, 70, 40],
-        ["April", 160, 100, 70]
-      ],
-      caption: "Tabel 1.1: Data Rekap Penjualan Buku (Januari - April)"
-    },
-    sampleAnswer: "Perkiraan penjualan Buku Novel di bulan Mei adalah 192 buku.\nLangkah perhitungan:\n1) Penjualan buku novel di bulan April = 160 buku.\n2) Peningkatan 20% = 20% × 160 = 0,2 × 160 = 32 buku.\n3) Perkiraan bulan Mei = 160 + 32 = 192 buku (atau 160 × 120% = 192 buku).",
-    keywords: ["192", "20%", "32", "160", "april", "mei"],
+    question: "Sebutkan 3 jenis rumus fungsi statistik pada spreadsheet (pilih di antara: AVERAGE, MAX, MIN, SMALL, atau LARGE) dan jelaskan fungsi serta cara kerja dari masing-masing rumus yang kamu pilih tersebut!",
+    sampleAnswer: "Tiga jenis fungsi statistik spreadsheet:\n1) AVERAGE: Berfungsi untuk menghitung nilai rata-rata aritmetika dari sekumpulan nilai data numerik dalam rentang sel (misal: =AVERAGE(B2:B10)).\n2) MAX: Berfungsi untuk mencari dan mengembalikan nilai angka tertinggi (terbesar) dari sekumpulan data.\n3) MIN: Berfungsi untuk mencari dan mengembalikan nilai angka terendah (terkecil) dari sekumpulan data.\n(Alternatif fungsi lainnya:)\n- LARGE: Berfungsi mencari nilai terbesar pada posisi urutan tertentu (peringkat ke-k), misalnya mencari nilai tertinggi ke-2 atau ke-3.\n- SMALL: Berfungsi mencari nilai terkecil pada urutan ke-k dari sekumpulan data numerik.",
+    keywords: ["average", "max", "min", "small", "large", "rata-rata", "tertinggi", "terbesar", "terendah", "terkecil", "urutan", "peringkat"],
     maxScore: 20,
     scoringGuide: {
-      fullCriteria: "Menghasilkan angka akhir 192 buku dengan menuliskan rumus atau langkah 160 + (20% * 160) = 192 secara jelas.",
-      partialCriteria: "Menghitung kenaikan 32 buku dengan benar namun lupa menambahkan ke 160, atau angka akhir 192 tanpa langkah runtut.",
-      minimalCriteria: "Salah dalam perkalian persentase namun menunjukkan upaya rumus."
+      fullCriteria: "Menyebutkan 3 fungsi statistik dan menjelaskan fungsi serta cara kerjanya secara tepat dan lengkap.",
+      partialCriteria: "Menyebutkan 2 fungsi statistik dengan penjelasan lengkap, atau 3 fungsi namun penjelasannya kurang rinci.",
+      minimalCriteria: "Hanya menyebutkan 1 fungsi statistik."
     },
-    explanation: "Menguji kemampuan prediksi tren data (forecasting) menggunakan persentase aritmetika pada lembar kerja."
+    explanation: "Menguji kompetensi siswa dalam mengolah data kuantitatif menggunakan fungsi statistik pemusatan dan sebaran data."
   },
   {
     id: 5,
-    question: "Menurut pendapatmu, mengapa penjualan Buku Pelajaran cenderung mengalami peningkatan yang cukup tajam pada bulan April (mencapai 100 buku)? Analisislah kemungkinan penyebabnya berdasarkan pola kalender akademik sekolah!",
-    tableData: {
-      headers: ["Bulan", "Buku Novel", "Buku Pelajaran", "Buku Cerita Anak"],
-      rows: [
-        ["Januari", 120, 80, 50],
-        ["Februari", 100, 90, 60],
-        ["Maret", 140, 70, 40],
-        ["April", 160, 100, 70]
-      ],
-      caption: "Tabel 1.1: Data Rekap Penjualan Buku (Januari - April)"
-    },
-    sampleAnswer: "Peningkatan penjualan Buku Pelajaran di bulan April berkaitan erat dengan kalender pendidikan:\n1) Persiapan menghadapi Penilaian Akhir Tahun (PAT) / Asesmen Sumatif Akhir Semester / Ujian Sekolah yang umumnya berlangsung antara bulan April hingga Mei/Juni.\n2) Siswa dan orang tua membeli buku tambahan referensi, buku latihan soal, atau modul pengayaan untuk persiapan ujian kenaikan kelas.\n3) Dimulainya pemantapan materi semester genap oleh sekolah dan bimbingan belajar.",
-    keywords: ["ujian", "semester", "pat", "kenaikan kelas", "persiapan", "latihan soal", "belajar", "sekolah", "kalender akademik"],
+    question: "Jelaskan cara kerja dan kegunaan rumus fungsi logika pada spreadsheet yaitu AND, OR, dan NOT! Jelaskan pula bagaimana kondisi nilai TRUE atau FALSE dihasilkan oleh masing-masing fungsi tersebut!",
+    sampleAnswer: "Penjelasan fungsi logika pada spreadsheet:\n1) Fungsi AND: Berfungsi menguji beberapa syarat/kondisi. Menghasilkan nilai TRUE jika SEMUA kondisi yang diuji bernilai benar. Jika ada satu saja kondisi yang salah, maka menghasilkan FALSE.\n2) Fungsi OR: Berfungsi menguji beberapa syarat/kondisi. Menghasilkan nilai TRUE jika MINIMAL SATU (salah satu) kondisi bernilai benar. Hanya menghasilkan FALSE jika semua kondisi bernilai salah.\n3) Fungsi NOT: Berfungsi membalikkan nilai logika suatu kondisi. Jika kondisi bernilai TRUE maka diubah menjadi FALSE, dan sebaliknya jika kondisi bernilai FALSE maka diubah menjadi TRUE.",
+    keywords: ["and", "or", "not", "true", "false", "semua", "salah satu", "minimal satu", "membalikkan", "kondisi", "logika", "benar", "salah"],
     maxScore: 20,
     scoringGuide: {
-      fullCriteria: "Memberikan analisis logis berbasis kalender pendidikan (persiapan ujian semester/PAT/kenaikan kelas, kebutuhan latihan soal).",
-      partialCriteria: "Menyebutkan faktor ujian atau belajar namun penjelasan singkat/kurang elaboratif.",
-      minimalCriteria: "Alasan tidak relevan atau hanya menjawab 'karena banyak yang beli'."
+      fullCriteria: "Menjelaskan ketiga fungsi logika (AND, OR, NOT) secara lengkap beserta aturan penghasilan nilai TRUE dan FALSE.",
+      partialCriteria: "Menjelaskan 2 fungsi logika dengan benar.",
+      minimalCriteria: "Hanya menjelaskan 1 fungsi atau penjelasan aturan logika kurang tepat."
     },
-    explanation: "Menguji keterampilan berpikir kritis dan interpretasi makna di balik pola perubahan data tren penjualan."
+    explanation: "Menguji logika berpikir komputasional dalam pengambilan keputusan berdasar ekspresi boolean pada lembar kerja."
   }
 ];
 
@@ -327,68 +297,120 @@ export function autoGradeEssay(questionId: number, studentText: string): {
     };
   }
 
-  // Khusus soal hitungan pasti No. 3 dan No. 4:
-  if (questionId === 4) {
-    const has192 = cleanedText.includes("192");
-    const has32 = cleanedText.includes("32");
-    const hasFormula = cleanedText.includes("20%") || cleanedText.includes("160") || cleanedText.includes("0,2") || cleanedText.includes("0.2");
+  // Khusus Soal No. 3: SUM, COUNT, COUNTA, SUMIF, COUNTIF
+  if (questionId === 3) {
+    const hasSum = cleanedText.includes("sum") && (cleanedText.includes("jumlah") || cleanedText.includes("tambah"));
+    const hasCount = cleanedText.includes("count") && (cleanedText.includes("banyak") || cleanedText.includes("hitung") || cleanedText.includes("angka"));
+    const hasCounta = cleanedText.includes("counta") && (cleanedText.includes("kosong") || cleanedText.includes("teks") || cleanedText.includes("data"));
+    const hasSumif = cleanedText.includes("sumif") && (cleanedText.includes("kriteria") || cleanedText.includes("syarat") || cleanedText.includes("kondisi"));
+    const hasCountif = cleanedText.includes("countif") && (cleanedText.includes("kriteria") || cleanedText.includes("syarat") || cleanedText.includes("kondisi"));
 
-    if (has192 && (has32 || hasFormula)) {
+    const detectedCount = [hasSum, hasCount, hasCounta, hasSumif, hasCountif].filter(Boolean).length;
+    const mentionedNames = ["sum", "count", "counta", "sumif", "countif"].filter((k) => cleanedText.includes(k));
+
+    if (detectedCount >= 4 || (mentionedNames.length === 5 && cleanedText.length > 80)) {
       return {
         score: 20,
         maxScore: 20,
-        feedback: "Sangat Tepat! Perhitungan perkiraan penjualan buku novel bulan Mei adalah 192 (160 + 32) dengan langkah akurat.",
-        matchedKeywords: ["192", "32", "160", "20%"]
+        feedback: "Sangat Lengkap! Berhasil menjelaskan fungsi dasar SUM, COUNT, COUNTA, SUMIF, dan COUNTIF beserta perbedaannya dengan sangat baik.",
+        matchedKeywords: mentionedNames
       };
-    } else if (has192) {
+    } else if (detectedCount >= 3 || mentionedNames.length >= 4) {
       return {
-        score: 18,
+        score: 16,
         maxScore: 20,
-        feedback: "Hasil akhir 192 benar, langkah perhitungan perlu lebih dirinci.",
-        matchedKeywords: ["192"]
+        feedback: "Bagus! Sebagian besar fungsi dasar dijelaskan dengan tepat.",
+        matchedKeywords: mentionedNames
       };
-    } else if (has32) {
+    } else if (detectedCount >= 2 || mentionedNames.length >= 2) {
       return {
         score: 12,
         maxScore: 20,
-        feedback: "Kenaikan 32 buku sudah tepat, namun belum ditambahkan ke penjualan April (160 + 32 = 192).",
-        matchedKeywords: ["32", "20%"]
+        feedback: "Cukup baik, namun beberapa rumus fungsi dasar belum dijelaskan secara menyeluruh.",
+        matchedKeywords: mentionedNames
+      };
+    } else {
+      return {
+        score: 8,
+        maxScore: 20,
+        feedback: "Penjelasan masih terbatas pada sedikit rumus fungsi, perlu melengkapi penjelasan fungsi lainnya.",
+        matchedKeywords: mentionedNames
       };
     }
   }
 
-  if (questionId === 3) {
-    const mentionsNovel = cleanedText.includes("novel");
-    const mentions520 = cleanedText.includes("520");
-    const mentionsTotalOrSum = cleanedText.includes("total") || cleanedText.includes("jumlah") || cleanedText.includes("tambah") || cleanedText.includes("sum");
+  // Khusus Soal No. 4: 3 Fungsi Statistik (AVERAGE, MAX, MIN, SMALL, LARGE)
+  if (questionId === 4) {
+    const statsFunctions = ["average", "max", "min", "small", "large"];
+    const mentionedStats = statsFunctions.filter((k) => cleanedText.includes(k));
+    const explainsAvg = cleanedText.includes("average") && (cleanedText.includes("rata") || cleanedText.includes("mean"));
+    const explainsMax = cleanedText.includes("max") && (cleanedText.includes("tinggi") || cleanedText.includes("besar"));
+    const explainsMin = cleanedText.includes("min") && (cleanedText.includes("rendah") || cleanedText.includes("kecil"));
+    const explainsSmall = cleanedText.includes("small") && (cleanedText.includes("kecil") || cleanedText.includes("urutan"));
+    const explainsLarge = cleanedText.includes("large") && (cleanedText.includes("besar") || cleanedText.includes("urutan"));
 
-    if (mentionsNovel && mentions520 && mentionsTotalOrSum) {
+    const validExplanations = [explainsAvg, explainsMax, explainsMin, explainsSmall, explainsLarge].filter(Boolean).length;
+
+    if (validExplanations >= 3 || (mentionedStats.length >= 3 && cleanedText.length > 70)) {
       return {
         score: 20,
         maxScore: 20,
-        feedback: "Sangat Tepat! Menyebutkan Buku Novel dengan total 520 serta penjelasan perhitungan lengkap.",
-        matchedKeywords: ["novel", "520", "total"]
+        feedback: "Luar biasa! Berhasil menyebutkan 3 fungsi statistik dan menjelaskan fungsi serta cara kerjanya secara jelas.",
+        matchedKeywords: mentionedStats
       };
-    } else if (mentionsNovel && (mentions520 || mentionsTotalOrSum)) {
+    } else if (validExplanations >= 2 || mentionedStats.length >= 2) {
       return {
-        score: 17,
+        score: 15,
         maxScore: 20,
-        feedback: "Tepat, Buku Novel adalah penjualan tertinggi dengan total 520 buku.",
-        matchedKeywords: ["novel", mentions520 ? "520" : "total"]
+        feedback: "Baik, sudah menjelaskan 2 fungsi statistik. Perlu melengkapi 1 fungsi statistik lagi agar nilai maksimal.",
+        matchedKeywords: mentionedStats
       };
-    } else if (mentionsNovel) {
+    } else if (mentionedStats.length >= 1) {
       return {
-        score: 13,
+        score: 10,
         maxScore: 20,
-        feedback: "Jenis buku benar (Buku Novel), namun rincian hitungan total (520) belum disertakan.",
-        matchedKeywords: ["novel"]
+        feedback: "Hanya menyebutkan/menjelaskan 1 fungsi statistik. Soal meminta minimal 3 jenis fungsi.",
+        matchedKeywords: mentionedStats
       };
     }
   }
 
-  // Soal Konseptual No. 1, 2, 5
+  // Khusus Soal No. 5: Logika AND, OR, NOT
+  if (questionId === 5) {
+    const hasAnd = cleanedText.includes("and");
+    const hasOr = cleanedText.includes("or");
+    const hasNot = cleanedText.includes("not");
+    const mentionsTrueFalse = cleanedText.includes("true") || cleanedText.includes("false") || cleanedText.includes("benar") || cleanedText.includes("salah");
+    const mentionsAllOrAny = cleanedText.includes("semua") || cleanedText.includes("salah satu") || cleanedText.includes("minimal") || cleanedText.includes("balik");
+
+    const logicCount = [hasAnd, hasOr, hasNot].filter(Boolean).length;
+
+    if (logicCount === 3 && mentionsTrueFalse && mentionsAllOrAny) {
+      return {
+        score: 20,
+        maxScore: 20,
+        feedback: "Sangat Tepat! Menjelaskan cara kerja AND (semua benar), OR (salah satu benar), dan NOT (membalikkan) serta kondisi TRUE/FALSE secara akurat.",
+        matchedKeywords: ["and", "or", "not", "true/false"]
+      };
+    } else if (logicCount >= 2 && mentionsTrueFalse) {
+      return {
+        score: 15,
+        maxScore: 20,
+        feedback: "Baik, penjelasan konsep logika sudah cukup jelas, lengkapi penjelasan ketiga fungsinya.",
+        matchedKeywords: ["and", "or", "not"].filter((k) => cleanedText.includes(k))
+      };
+    } else if (logicCount >= 1) {
+      return {
+        score: 10,
+        maxScore: 20,
+        feedback: "Penjelasan fungsi logika belum lengkap untuk ketiga fungsi (AND, OR, NOT).",
+        matchedKeywords: ["and", "or", "not"].filter((k) => cleanedText.includes(k))
+      };
+    }
+  }
+
+  // Soal Konseptual No. 1 & 2
   const matched = q.keywords.filter((kw) => cleanedText.includes(kw.toLowerCase()));
-  const matchRatio = matched.length / Math.max(q.keywords.length * 0.5, 1);
   const textLength = cleanedText.split(/\s+/).length;
 
   let score = 0;
