@@ -1,14 +1,15 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import type { Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createServer as createViteServer } from 'vite';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3000;
+const isProd = process.env.NODE_ENV === 'production';
+const PORT = isProd ? (Number(process.env.PORT) || 8080) : 3000;
 const DATA_DIR = path.resolve(__dirname, 'data');
 const DATA_FILE = path.resolve(DATA_DIR, 'exam_submissions.json');
 
@@ -22,7 +23,7 @@ const initialSampleSubmissions = [
   {
     id: "sub-seed-001",
     studentName: "Ahmad Rizky Pratama",
-    studentClass: "VII-A",
+    studentClass: "VII Academic",
     studentNumber: "02",
     startedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
     finishedAt: new Date(Date.now() - 3600000 * 1.5).toISOString(),
@@ -58,7 +59,7 @@ const initialSampleSubmissions = [
   {
     id: "sub-seed-002",
     studentName: "Dinda Aulia Putri",
-    studentClass: "VII-A",
+    studentClass: "VII Cambridge",
     studentNumber: "08",
     startedAt: new Date(Date.now() - 3600000 * 1.2).toISOString(),
     finishedAt: new Date(Date.now() - 3600000 * 0.8).toISOString(),
@@ -102,7 +103,7 @@ const initialSampleSubmissions = [
   {
     id: "sub-seed-003",
     studentName: "Muhammad Farhan",
-    studentClass: "VII-B",
+    studentClass: "VII Tahfidz",
     studentNumber: "19",
     startedAt: new Date(Date.now() - 1800000).toISOString(),
     finishedAt: new Date(Date.now() - 600000).toISOString(),
@@ -319,7 +320,7 @@ app.get('/api/export-csv', (_req: Request, res: Response) => {
   try {
     const submissions = readSubmissions();
     // UTF-8 BOM for Excel in Windows/Mac
-    let csv = '\uFEFFNo,ID,Nama Siswa,Kelas,No Absen,Skor PG (60%),Skor Essay (40%),Nilai Akhir,Status Kelulusan (KKM 75),Jumlah Pelanggaran,Durasi (Menit),Waktu Selesai,Catatan Guru\r\n';
+    let csv = '\uFEFFNo,ID,Nama Siswa,Kelas,No Absen,Skor PG (60%),Skor Essay (40%),Nilai Akhir,Status Kelulusan (KKM 78),Jumlah Pelanggaran,Durasi (Menit),Waktu Selesai,Catatan Guru\r\n';
 
     submissions.forEach((item, index) => {
       const durMin = Math.round((item.durationSeconds || 0) / 60);
@@ -351,9 +352,8 @@ app.get('/api/export-csv', (_req: Request, res: Response) => {
 
 // Vite Middleware for SPA development and production static serve
 async function startServer() {
-  const isProd = process.env.NODE_ENV === 'production';
-
   if (!isProd) {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',

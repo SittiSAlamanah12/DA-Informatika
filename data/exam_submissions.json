@@ -1,0 +1,265 @@
+[
+  {
+    "id": "sub-seed-001",
+    "studentName": "Ahmad Rizky Pratama",
+    "studentClass": "VII Academic",
+    "studentNumber": "02",
+    "startedAt": "2026-10-15T04:14:56.199Z",
+    "finishedAt": "2026-10-15T04:44:56.199Z",
+    "durationSeconds": 1820,
+    "answers": {
+      "pg": {
+        "1": "A",
+        "2": "B",
+        "3": "D",
+        "4": "C",
+        "5": "D",
+        "6": "C",
+        "7": "B",
+        "8": "B",
+        "9": "C",
+        "10": "B"
+      },
+      "essay": {
+        "1": "Data yang diperlukan: nama kegiatan harian, waktu pelaksanaan (jam dan hari), tempat berlangsungnya acara, penanggung jawab, serta perlengkapan.",
+        "2": "Langkah-langkah: 1) Membuat daftar seluruh kegiatan harian. 2) Menentukan skala prioritas. 3) Mengatur alokasi waktu dan istirahat. 4) Menyusun secara teratur dan konsisten mengevaluasi.",
+        "3": "Jenis buku yang paling banyak terjual adalah Buku Novel dengan total 520 buku (120+100+140+160=520). Sedangkan buku pelajaran 340 dan cerita anak 220.",
+        "4": "Penjualan buku novel bulan April = 160. Peningkatan 20% = 32 buku. Maka perkiraan penjualan bulan Mei = 160 + 32 = 192 buku.",
+        "5": "Buku pelajaran meningkat pada bulan April karena siswa dan sekolah mempersiapkan Ujian Akhir Semester / PAT dan kenaikan kelas sehingga membutuhkan latihan soal."
+      }
+    },
+    "pgCorrectCount": 10,
+    "pgScore": 100,
+    "essayScore": 98,
+    "finalScore": 99,
+    "isPassed": true,
+    "essayEvaluations": [
+      {
+        "questionId": 1,
+        "autoScore": 20,
+        "finalScore": 20,
+        "maxScore": 20,
+        "autoFeedback": "Sangat lengkap dan relevan."
+      },
+      {
+        "questionId": 2,
+        "autoScore": 20,
+        "finalScore": 20,
+        "maxScore": 20,
+        "autoFeedback": "Runtutan langkah sistematis."
+      },
+      {
+        "questionId": 3,
+        "autoScore": 20,
+        "finalScore": 20,
+        "maxScore": 20,
+        "autoFeedback": "Perhitungan 520 tepat dan perbandingan jelas."
+      },
+      {
+        "questionId": 4,
+        "autoScore": 20,
+        "finalScore": 20,
+        "maxScore": 20,
+        "autoFeedback": "Hitungan 192 eksemplar tepat."
+      },
+      {
+        "questionId": 5,
+        "autoScore": 18,
+        "finalScore": 18,
+        "maxScore": 20,
+        "autoFeedback": "Analisis persiapan ujian sangat logis."
+      }
+    ],
+    "violations": [],
+    "violationCount": 0,
+    "status": "SUBMITTED",
+    "reviewedByTeacher": true,
+    "teacherNotes": "Kerja bagus, pemahaman konsep rumus dan analisis grafik sangat memuaskan."
+  },
+  {
+    "id": "sub-seed-002",
+    "studentName": "Dinda Aulia Putri",
+    "studentClass": "VII Cambridge",
+    "studentNumber": "08",
+    "startedAt": "2026-10-15T05:02:56.199Z",
+    "finishedAt": "2026-10-15T05:26:56.199Z",
+    "durationSeconds": 1540,
+    "answers": {
+      "pg": {
+        "1": "A",
+        "2": "B",
+        "3": "A",
+        "4": "C",
+        "5": "D",
+        "6": "C",
+        "7": "B",
+        "8": "B",
+        "9": "C",
+        "10": "B"
+      },
+      "essay": {
+        "1": "Perlu nama kegiatan, jam mulai, dan tempat pelaksanaan.",
+        "2": "Menulis apa yang mau dikerjakan lalu memberi waktu untuk setiap tugas.",
+        "3": "Buku Novel paling banyak yaitu 520.",
+        "4": "Bulan mei diperkirakan 192 buku novel karena naik 20 persen dari 160.",
+        "5": "Karena banyak ulangan di sekolah pada bulan april."
+      }
+    },
+    "pgCorrectCount": 9,
+    "pgScore": 90,
+    "essayScore": 78,
+    "finalScore": 85,
+    "isPassed": true,
+    "essayEvaluations": [
+      {
+        "questionId": 1,
+        "autoScore": 17,
+        "finalScore": 17,
+        "maxScore": 20,
+        "autoFeedback": "Cukup baik, sudah ada waktu dan tempat."
+      },
+      {
+        "questionId": 2,
+        "autoScore": 13,
+        "finalScore": 13,
+        "maxScore": 20,
+        "autoFeedback": "Bisa ditambahkan konsep prioritas dan jeda istirahat."
+      },
+      {
+        "questionId": 3,
+        "autoScore": 18,
+        "finalScore": 18,
+        "maxScore": 20,
+        "autoFeedback": "Jawaban tepat 520."
+      },
+      {
+        "questionId": 4,
+        "autoScore": 18,
+        "finalScore": 18,
+        "maxScore": 20,
+        "autoFeedback": "Hitungan 192 benar."
+      },
+      {
+        "questionId": 5,
+        "autoScore": 12,
+        "finalScore": 12,
+        "maxScore": 20,
+        "autoFeedback": "Relevan dengan musim ulangan."
+      }
+    ],
+    "violations": [
+      {
+        "id": "v-001",
+        "timestamp": "2026-10-15T05:14:56.199Z",
+        "formattedTime": "08:24:12",
+        "type": "TAB_SWITCH",
+        "message": "Terdeteksi beralih jendela/tab browser saat mengerjakan soal nomor 3",
+        "questionNumber": 3
+      }
+    ],
+    "violationCount": 1,
+    "status": "SUBMITTED",
+    "reviewedByTeacher": false
+  },
+  {
+    "id": "sub-seed-003",
+    "studentName": "Muhammad Farhan",
+    "studentClass": "VII Tahfidz",
+    "studentNumber": "19",
+    "startedAt": "2026-10-15T05:44:56.199Z",
+    "finishedAt": "2026-10-15T06:04:56.199Z",
+    "durationSeconds": 1200,
+    "answers": {
+      "pg": {
+        "1": "A",
+        "2": "C",
+        "3": "A",
+        "4": "C",
+        "5": "B",
+        "6": "C",
+        "7": "A",
+        "8": "B",
+        "9": "C",
+        "10": "A"
+      },
+      "essay": {
+        "1": "Jam dan kegiatan.",
+        "2": "Membuat jadwal di kertas.",
+        "3": "Buku novel.",
+        "4": "Sekitar 180 atau 192.",
+        "5": "Karena murid harus belajar."
+      }
+    },
+    "pgCorrectCount": 5,
+    "pgScore": 50,
+    "essayScore": 48,
+    "finalScore": 49,
+    "isPassed": false,
+    "essayEvaluations": [
+      {
+        "questionId": 1,
+        "autoScore": 9,
+        "finalScore": 9,
+        "maxScore": 20,
+        "autoFeedback": "Penjelasan terlalu singkat."
+      },
+      {
+        "questionId": 2,
+        "autoScore": 9,
+        "finalScore": 9,
+        "maxScore": 20,
+        "autoFeedback": "Perlu rincian langkah efisien."
+      },
+      {
+        "questionId": 3,
+        "autoScore": 13,
+        "finalScore": 13,
+        "maxScore": 20,
+        "autoFeedback": "Nama buku benar, tanpa perhitungan."
+      },
+      {
+        "questionId": 4,
+        "autoScore": 10,
+        "finalScore": 10,
+        "maxScore": 20,
+        "autoFeedback": "Tanpa langkah perkalian persentase."
+      },
+      {
+        "questionId": 5,
+        "autoScore": 7,
+        "finalScore": 7,
+        "maxScore": 20,
+        "autoFeedback": "Alasan masih terlalu umum."
+      }
+    ],
+    "violations": [
+      {
+        "id": "v-002",
+        "timestamp": "2026-10-15T05:49:56.199Z",
+        "formattedTime": "08:45:00",
+        "type": "TAB_SWITCH",
+        "message": "Pindah tab ke aplikasi peramban lain",
+        "questionNumber": 2
+      },
+      {
+        "id": "v-003",
+        "timestamp": "2026-10-15T05:51:36.199Z",
+        "formattedTime": "08:46:40",
+        "type": "FULLSCREEN_EXIT",
+        "message": "Keluar dari mode layar penuh (Fullscreen Exit)",
+        "questionNumber": 3
+      },
+      {
+        "id": "v-004",
+        "timestamp": "2026-10-15T05:54:56.199Z",
+        "formattedTime": "08:50:11",
+        "type": "TAB_SWITCH",
+        "message": "Membuka jendela baru di luar sistem ujian",
+        "questionNumber": 5
+      }
+    ],
+    "violationCount": 3,
+    "status": "SUBMITTED",
+    "reviewedByTeacher": false
+  }
+]

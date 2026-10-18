@@ -25,8 +25,10 @@ import {
   AlertTriangle,
   Sparkles,
   Save,
+  Cloud,
   X
 } from 'lucide-react';
+import { GoogleDriveSyncPanel } from './GoogleDriveSyncPanel';
 
 interface Props {
   onLogout: () => void;
@@ -35,7 +37,7 @@ interface Props {
 export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
   const [submissions, setSubmissions] = useState<ExamSubmission[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [activeTab, setActiveTab] = useState<'REKAP' | 'BANK_SOAL' | 'AUDIT_PELANGGARAN'>('REKAP');
+  const [activeTab, setActiveTab] = useState<'REKAP' | 'BANK_SOAL' | 'AUDIT_PELANGGARAN' | 'GOOGLE_DRIVE'>('REKAP');
   
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -358,6 +360,18 @@ export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
           >
             <BookOpen className="w-4 h-4" />
             <span>Bank Soal & Kunci Jawaban</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('GOOGLE_DRIVE')}
+            className={`pb-3 text-xs sm:text-sm font-bold flex items-center space-x-2 border-b-2 transition ${
+              activeTab === 'GOOGLE_DRIVE'
+                ? 'border-amber-500 text-amber-400'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Cloud className="w-4 h-4" />
+            <span>Google Drive Sync</span>
           </button>
         </div>
 
@@ -720,6 +734,11 @@ export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* TAB 4: GOOGLE DRIVE SYNC & BACKUP */}
+        {activeTab === 'GOOGLE_DRIVE' && (
+          <GoogleDriveSyncPanel submissions={submissions} />
         )}
       </div>
 

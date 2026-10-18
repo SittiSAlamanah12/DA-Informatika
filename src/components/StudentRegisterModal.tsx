@@ -9,12 +9,17 @@ interface Props {
 
 export const StudentRegisterModal: React.FC<Props> = ({ onStartExam, onOpenAdminLogin }) => {
   const [name, setName] = useState('');
-  const [studentClass, setStudentClass] = useState('VII-A');
+  const [studentClass, setStudentClass] = useState('VII Academic');
   const [studentNumber, setStudentNumber] = useState('');
   const [hasAgreed, setHasAgreed] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const classOptions = ['VII-A', 'VII-B', 'VII-C', 'VII-D', 'VII-E', 'VII-F', 'VII-G'];
+  const classOptions = [
+    'VII Academic',
+    'VII Cambridge',
+    'VII Tahfidz',
+    'VII Tahfidz Timur Tengah'
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -156,11 +161,11 @@ export const StudentRegisterModal: React.FC<Props> = ({ onStartExam, onOpenAdmin
                 <select
                   value={studentClass}
                   onChange={(e) => setStudentClass(e.target.value)}
-                  className="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                  className="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer"
                 >
                   {classOptions.map((opt) => (
-                    <option key={opt} value={opt} className="bg-slate-900 text-white">
-                      Kelas {opt}
+                    <option key={opt} value={opt} className="bg-slate-900 text-white py-1">
+                      {opt}
                     </option>
                   ))}
                 </select>
