@@ -17,6 +17,7 @@ export const StudentRegisterModal: React.FC<Props> = ({ onStartExam, onOpenAdmin
   const classOptions = [
     'VII Academic',
     'VII Cambridge',
+    'VII Cambridge (7.3)',
     'VII Tahfidz',
     'VII Tahfidz Timur Tengah'
   ];
@@ -54,7 +55,7 @@ export const StudentRegisterModal: React.FC<Props> = ({ onStartExam, onOpenAdmin
           </div>
           <div>
             <span className="text-xs font-semibold tracking-wider uppercase text-blue-400">Sistem CBT Asesmen Sekolah</span>
-            <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">SMP Negeri / MTs</h1>
+            <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">SMP Arrohmah Putri IIBS</h1>
           </div>
         </div>
 

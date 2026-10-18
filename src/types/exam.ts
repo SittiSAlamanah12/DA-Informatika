@@ -1,4 +1,4 @@
-export type ClassGrade = 'VII Academic' | 'VII Cambridge' | 'VII Tahfidz' | 'VII Tahfidz Timur Tengah' | string;
+export type ClassGrade = 'VII Academic' | 'VII Cambridge' | 'VII Cambridge (7.3)' | 'VII Tahfidz' | 'VII Tahfidz Timur Tengah' | string;
 
 export interface ViolationLog {
   id: string;

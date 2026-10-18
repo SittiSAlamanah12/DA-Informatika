@@ -72,14 +72,14 @@ export const AdminLoginModal: React.FC<Props> = ({ isOpen, onClose, onSuccess })
                 type="password"
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                placeholder="PIN Keamanan Guru (contoh: guru123)"
+                placeholder="Masukkan PIN Keamanan Guru"
                 className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
                 autoFocus
               />
               <KeyRound className="w-4 h-4 text-slate-500 absolute right-3 top-3" />
             </div>
             <p className="text-[11px] text-slate-500 mt-1">
-              * Default PIN Guru: <code className="text-indigo-300 bg-slate-800 px-1 py-0.5 rounded">guru123</code>
+              * Masukkan PIN otorisasi guru pengampu yang sah.
             </p>
           </div>
 
