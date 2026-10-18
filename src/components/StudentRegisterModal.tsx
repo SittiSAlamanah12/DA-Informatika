@@ -115,7 +115,7 @@ export const StudentRegisterModal: React.FC<Props> = ({ onStartExam, onOpenAdmin
               <li>Layar akan <strong className="text-amber-200">terkunci penuh (Fullscreen)</strong> secara otomatis saat ujian dimulai.</li>
               <li>Dilarang <strong className="text-amber-200">berpindah tab browser, membuka Google, AI, atau aplikasi lain</strong>. Setiap pergantian jendela akan dicatat ke log pelanggaran sistem server.</li>
               <li>Fitur <strong className="text-amber-200">Copy, Paste, Klik Kanan, dan Pintasan Keyboard</strong> dinonaktifkan demi integritas ujian.</li>
-              <li>Jika terdeteksi melanggar lebih dari 5 kali, ujian akan diselesaikan paksa secara otomatis.</li>
+              <li>Jika terdeteksi melanggar sebanyak <strong className="text-amber-200">{EXAM_METADATA.maxViolationsAllowed} kali</strong>, ujian akan diselesaikan paksa secara otomatis.</li>
             </ul>
           </div>
         </div>

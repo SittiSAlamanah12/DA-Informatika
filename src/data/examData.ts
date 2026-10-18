@@ -59,7 +59,7 @@ export const EXAM_METADATA: ExamMetadata = {
   totalEssay: 5,
   pgWeight: 60,
   essayWeight: 40,
-  maxViolationsAllowed: 5,
+  maxViolationsAllowed: 3,
 };
 
 // 10 Soal Pilihan Ganda diambil langsung dari Buku Siswa Bab 1 Asesmen Formatif (Hal. 28)
