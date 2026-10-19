@@ -188,6 +188,162 @@ function saveSubmissions(data: any[]): void {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Real-time SSE (Server-Sent Events) Manager
+interface SseClient {
+  id: string;
+  res: Response;
+}
+
+let sseClients: SseClient[] = [];
+
+function broadcastSse(event: string, payload: any) {
+  const message = `event: ${event}\ndata: ${JSON.stringify(payload)}\n\n`;
+  sseClients.forEach((client) => {
+    try {
+      client.res.write(message);
+    } catch (e) {
+      // client connection closed
+    }
+  });
+}
+
+interface ActiveExamStudent {
+  submissionId: string;
+  studentName: string;
+  studentClass: string;
+  studentNumber: string;
+  startedAt: string;
+  lastActiveAt: string;
+  answeredPgCount: number;
+  answeredEssayCount: number;
+  totalAnswered: number;
+  currentSection: 'PG' | 'ESSAY';
+  currentQuestion: number;
+}
+
+const activeStudentsMap = new Map<string, ActiveExamStudent>();
+
+// Clean up stale active students (inactive for > 90 minutes)
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, val] of activeStudentsMap.entries()) {
+    if (now - new Date(val.lastActiveAt).getTime() > 90 * 60 * 1000) {
+      activeStudentsMap.delete(key);
+    }
+  }
+}, 60000);
+
+// SSE Real-time stream endpoint
+app.get('/api/realtime/stream', (_req: Request, res: Response) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache, no-transform',
+    'Connection': 'keep-alive',
+    'X-Accel-Buffering': 'no'
+  });
+
+  const clientId = `client-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  sseClients.push({ id: clientId, res });
+
+  // Initial connection handshake with active students count
+  res.write(`event: CONNECTED\ndata: ${JSON.stringify({ 
+    clientId, 
+    timestamp: new Date().toISOString(),
+    activeCount: activeStudentsMap.size
+  })}\n\n`);
+
+  // Heartbeat ping every 15 seconds to keep connection alive
+  const pingInterval = setInterval(() => {
+    try {
+      res.write(': ping\n\n');
+    } catch {
+      clearInterval(pingInterval);
+    }
+  }, 15000);
+
+  _req.on('close', () => {
+    clearInterval(pingInterval);
+    sseClients = sseClients.filter((c) => c.id !== clientId);
+  });
+});
+
+// GET currently active students taking the exam
+app.get('/api/exam/active-students', (_req: Request, res: Response) => {
+  const list = Array.from(activeStudentsMap.values()).sort(
+    (a, b) => new Date(b.lastActiveAt).getTime() - new Date(a.lastActiveAt).getTime()
+  );
+  res.json({ success: true, data: list });
+});
+
+// Notify student started
+app.post('/api/exam/start', (req: Request, res: Response) => {
+  const { submissionId, studentName, studentClass, studentNumber } = req.body;
+  const id = submissionId || `sub-${Date.now()}`;
+  
+  const session: ActiveExamStudent = {
+    submissionId: id,
+    studentName: studentName || 'Siswa',
+    studentClass: studentClass || '-',
+    studentNumber: studentNumber || '-',
+    startedAt: new Date().toISOString(),
+    lastActiveAt: new Date().toISOString(),
+    answeredPgCount: 0,
+    answeredEssayCount: 0,
+    totalAnswered: 0,
+    currentSection: 'PG',
+    currentQuestion: 1
+  };
+
+  activeStudentsMap.set(id, session);
+
+  broadcastSse('STUDENT_STARTED', session);
+  res.json({ success: true, session });
+});
+
+// Notify student answer progress (realtime as student fills in answers)
+app.post('/api/exam/progress', (req: Request, res: Response) => {
+  const { 
+    submissionId, 
+    studentName, 
+    studentClass, 
+    studentNumber,
+    answeredPgCount = 0,
+    answeredEssayCount = 0,
+    currentSection = 'PG',
+    currentQuestion = 1
+  } = req.body;
+
+  if (!submissionId) {
+    res.status(400).json({ success: false, message: 'submissionId diperlukan' });
+    return;
+  }
+
+  const existing = activeStudentsMap.get(submissionId) || {
+    submissionId,
+    studentName: studentName || 'Siswa',
+    studentClass: studentClass || '-',
+    studentNumber: studentNumber || '-',
+    startedAt: new Date().toISOString()
+  };
+
+  const updated: ActiveExamStudent = {
+    ...existing,
+    studentName: studentName || existing.studentName,
+    studentClass: studentClass || existing.studentClass,
+    studentNumber: studentNumber || existing.studentNumber,
+    answeredPgCount: Number(answeredPgCount) || 0,
+    answeredEssayCount: Number(answeredEssayCount) || 0,
+    totalAnswered: (Number(answeredPgCount) || 0) + (Number(answeredEssayCount) || 0),
+    currentSection,
+    currentQuestion: Number(currentQuestion) || 1,
+    lastActiveAt: new Date().toISOString()
+  };
+
+  activeStudentsMap.set(submissionId, updated);
+  broadcastSse('STUDENT_PROGRESS', updated);
+  res.json({ success: true });
+});
+
 // Admin PIN check
 const ADMIN_PIN = process.env.ADMIN_PIN || "guru123";
 
@@ -225,6 +381,23 @@ app.post('/api/submissions', (req: Request, res: Response) => {
     }
 
     saveSubmissions(currentList);
+
+    // Remove student from active session map
+    if (submission.id) {
+      activeStudentsMap.delete(submission.id);
+    }
+
+    // Broadcast real-time submission to all listening dashboards
+    broadcastSse('SUBMISSION_CREATED', {
+      submission,
+      totalSubmissions: currentList.length,
+      studentName: submission.studentName,
+      studentClass: submission.studentClass,
+      finalScore: submission.finalScore,
+      isPassed: submission.isPassed,
+      activeCount: activeStudentsMap.size
+    });
+
     res.json({ success: true, message: "Hasil ujian berhasil disimpan di database.", id: submission.id });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
@@ -244,6 +417,15 @@ app.post('/api/submissions/log-violation', (req: Request, res: Response) => {
       target.violationCount = target.violations.length;
       saveSubmissions(currentList);
     }
+
+    // Broadcast real-time violation event to teacher
+    broadcastSse('VIOLATION_LOGGED', {
+      submissionId,
+      studentName,
+      studentClass,
+      violation,
+      violationCount: target ? target.violationCount : 1
+    });
 
     res.json({ success: true, recorded: true, count: target ? target.violationCount : 1 });
   } catch (err: any) {
@@ -273,6 +455,7 @@ app.put('/api/submissions/:id/grade', (req: Request, res: Response) => {
     currentList[index].reviewedByTeacher = true;
 
     saveSubmissions(currentList);
+    broadcastSse('SUBMISSION_UPDATED', { submission: currentList[index] });
     res.json({ success: true, message: "Nilai berhasil diperbarui oleh guru.", data: currentList[index] });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });
@@ -293,6 +476,7 @@ app.delete('/api/submissions/:id', (req: Request, res: Response) => {
     }
 
     saveSubmissions(currentList);
+    broadcastSse('SUBMISSION_DELETED', { id });
     res.json({ success: true, message: "Data berhasil dihapus." });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });
@@ -305,9 +489,11 @@ app.post('/api/submissions/reset', (req: Request, res: Response) => {
     const { restoreSeed } = req.body;
     if (restoreSeed) {
       saveSubmissions(initialSampleSubmissions);
+      broadcastSse('SUBMISSIONS_RESET', { restoreSeed: true, data: initialSampleSubmissions });
       res.json({ success: true, message: "Database direset ke data sampel awal." });
     } else {
       saveSubmissions([]);
+      broadcastSse('SUBMISSIONS_RESET', { restoreSeed: false, data: [] });
       res.json({ success: true, message: "Database dikosongkan." });
     }
   } catch (err: any) {

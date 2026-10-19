@@ -166,4 +166,124 @@ export class ApiService {
     }
     return pin === 'guru123' || pin === 'admin123' || pin === 'guru7';
   }
+
+  // Notify backend that student has started the exam
+  static async notifyStudentStarted(student: {
+    submissionId: string;
+    studentName: string;
+    studentClass: string;
+    studentNumber: string;
+  }): Promise<void> {
+    try {
+      await fetch('/api/exam/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(student)
+      });
+    } catch {
+      // Non-blocking
+    }
+  }
+
+  // Send student answer progress in real-time as they fill in questions
+  static async sendStudentProgress(progress: {
+    submissionId: string;
+    studentName: string;
+    studentClass: string;
+    studentNumber: string;
+    answeredPgCount: number;
+    answeredEssayCount: number;
+    currentSection: 'PG' | 'ESSAY';
+    currentQuestion: number;
+  }): Promise<void> {
+    try {
+      await fetch('/api/exam/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(progress)
+      });
+    } catch {
+      // Non-blocking
+    }
+  }
+
+  // Get active students currently taking exam
+  static async getActiveStudents(): Promise<any[]> {
+    try {
+      const res = await fetch('/api/exam/active-students');
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          return json.data;
+        }
+      }
+    } catch (e) {
+      // Fallback
+    }
+    return [];
+  }
+
+  // Real-time EventSource Subscription for Live Sync
+  static subscribeToRealtimeStream(
+    onEvent: (eventType: string, payload: any) => void,
+    onStatusChange?: (isConnected: boolean) => void
+  ): () => void {
+    let eventSource: EventSource | null = null;
+    let isClosed = false;
+
+    const connect = () => {
+      if (isClosed) return;
+      try {
+        eventSource = new EventSource('/api/realtime/stream');
+
+        eventSource.onopen = () => {
+          onStatusChange?.(true);
+        };
+
+        eventSource.onerror = () => {
+          onStatusChange?.(false);
+          eventSource?.close();
+          // Retry connection after 3 seconds
+          if (!isClosed) {
+            setTimeout(connect, 3000);
+          }
+        };
+
+        const events = [
+          'CONNECTED',
+          'STUDENT_STARTED',
+          'STUDENT_PROGRESS',
+          'SUBMISSION_CREATED',
+          'VIOLATION_LOGGED',
+          'SUBMISSION_UPDATED',
+          'SUBMISSION_DELETED',
+          'SUBMISSIONS_RESET'
+        ];
+
+        events.forEach((evtName) => {
+          eventSource?.addEventListener(evtName, (event: MessageEvent) => {
+            try {
+              const data = JSON.parse(event.data);
+              onEvent(evtName, data);
+            } catch (err) {
+              console.warn('Error parsing SSE event data:', err);
+            }
+          });
+        });
+      } catch (err) {
+        onStatusChange?.(false);
+      }
+    };
+
+    connect();
+
+    return () => {
+      isClosed = true;
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
+      onStatusChange?.(false);
+    };
+  }
 }

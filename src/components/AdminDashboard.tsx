@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { ExamSubmission, ExamStats, EssayEvaluation } from '../types/exam';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { ExamSubmission, ExamStats, EssayEvaluation, ActiveExamStudent, LiveRealtimeNotification } from '../types/exam';
 import { 
   MULTIPLE_CHOICE_QUESTIONS, 
   ESSAY_QUESTIONS, 
@@ -26,7 +26,12 @@ import {
   Sparkles,
   Save,
   Cloud,
-  X
+  X,
+  Radio,
+  Volume2,
+  VolumeX,
+  Activity,
+  Bell
 } from 'lucide-react';
 import { GoogleDriveSyncPanel } from './GoogleDriveSyncPanel';
 
@@ -39,6 +44,14 @@ export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'REKAP' | 'BANK_SOAL' | 'AUDIT_PELANGGARAN' | 'GOOGLE_DRIVE'>('REKAP');
   
+  // Realtime Live Sync State
+  const [realtimeConnected, setRealtimeConnected] = useState<boolean>(true);
+  const [activeStudents, setActiveStudents] = useState<ActiveExamStudent[]>([]);
+  const [recentSubmittedId, setRecentSubmittedId] = useState<string | null>(null);
+  const [liveNotifications, setLiveNotifications] = useState<LiveRealtimeNotification[]>([]);
+  const [lastSyncTime, setLastSyncTime] = useState<string>(() => new Date().toLocaleTimeString('id-ID'));
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedClass, setSelectedClass] = useState<string>('ALL');
@@ -51,17 +64,189 @@ export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
   const [teacherNotes, setTeacherNotes] = useState<string>('');
   const [savingGrade, setSavingGrade] = useState<boolean>(false);
 
-  // Load Submissions
+  // Sound chime synthesizer on new submission or event
+  const playSubmissionSound = useCallback(() => {
+    if (!soundEnabled) return;
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12); // A5
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.45);
+    } catch {
+      // Audio context restricted or unavailable
+    }
+  }, [soundEnabled]);
+
+  // Push floating notification toast
+  const addNotification = useCallback((notif: LiveRealtimeNotification) => {
+    setLiveNotifications((prev) => [notif, ...prev.slice(0, 4)]);
+    setTimeout(() => {
+      setLiveNotifications((prev) => prev.filter((n) => n.id !== notif.id));
+    }, 6000);
+  }, []);
+
+  // Load Submissions and Active Students
   const loadSubmissions = async () => {
     setLoading(true);
-    const data = await ApiService.getSubmissions();
-    setSubmissions(data);
-    setLoading(false);
+    try {
+      const [data, actives] = await Promise.all([
+        ApiService.getSubmissions(),
+        ApiService.getActiveStudents()
+      ]);
+      setSubmissions(data);
+      setActiveStudents(actives);
+      setLastSyncTime(new Date().toLocaleTimeString('id-ID'));
+    } catch (e) {
+      console.error('Error fetching data:', e);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Real-time EventSource Subscription + Fallback Polling
   useEffect(() => {
     loadSubmissions();
-  }, []);
+
+    // Subscribe to SSE Real-time stream
+    const unsubscribe = ApiService.subscribeToRealtimeStream(
+      (eventType: string, data: any) => {
+        setLastSyncTime(new Date().toLocaleTimeString('id-ID'));
+
+        if (eventType === 'CONNECTED') {
+          setRealtimeConnected(true);
+        }
+
+        if (eventType === 'STUDENT_STARTED') {
+          setActiveStudents((prev) => {
+            const exists = prev.some((s) => s.submissionId === data.submissionId);
+            if (exists) return prev;
+            return [data, ...prev];
+          });
+          addNotification({
+            id: `start-${Date.now()}-${Math.random()}`,
+            type: 'STARTED',
+            title: 'Siswa Mulai Mengerjakan',
+            message: `${data.studentName} (${data.studentClass}) telah membuka lembar ujian.`,
+            timestamp: new Date().toLocaleTimeString('id-ID'),
+            studentName: data.studentName
+          });
+        }
+
+        if (eventType === 'STUDENT_PROGRESS') {
+          setActiveStudents((prev) => {
+            const idx = prev.findIndex((s) => s.submissionId === data.submissionId);
+            if (idx >= 0) {
+              const copy = [...prev];
+              copy[idx] = { ...copy[idx], ...data };
+              return copy;
+            }
+            return [data, ...prev];
+          });
+        }
+
+        if (eventType === 'SUBMISSION_CREATED') {
+          const newSub: ExamSubmission = data.submission;
+          setSubmissions((prev) => {
+            const exists = prev.some((s) => s.id === newSub.id);
+            if (exists) {
+              return prev.map((s) => (s.id === newSub.id ? newSub : s));
+            }
+            return [newSub, ...prev];
+          });
+
+          // Remove from active students
+          setActiveStudents((prev) => prev.filter((s) => s.submissionId !== newSub.id));
+          
+          // Highlight this submission in table
+          setRecentSubmittedId(newSub.id);
+          setTimeout(() => setRecentSubmittedId(null), 8000);
+
+          playSubmissionSound();
+          addNotification({
+            id: `sub-${Date.now()}-${Math.random()}`,
+            type: 'SUBMISSION',
+            title: '🔔 Hasil Ujian Masuk (Realtime)!',
+            message: `${newSub.studentName} (${newSub.studentClass}) mengumpulkan ujian. Nilai: ${newSub.finalScore} (${newSub.isPassed ? 'TUNTAS KKM' : 'REMIDI'})`,
+            timestamp: new Date().toLocaleTimeString('id-ID'),
+            studentName: newSub.studentName,
+            score: newSub.finalScore
+          });
+        }
+
+        if (eventType === 'VIOLATION_LOGGED') {
+          setSubmissions((prev) => {
+            return prev.map((s) => {
+              if (s.id === data.submissionId) {
+                const violations = s.violations ? [...s.violations, data.violation] : [data.violation];
+                return {
+                  ...s,
+                  violations,
+                  violationCount: violations.length
+                };
+              }
+              return s;
+            });
+          });
+
+          addNotification({
+            id: `viol-${Date.now()}-${Math.random()}`,
+            type: 'VIOLATION',
+            title: '⚠️ Pelanggaran Terdeteksi!',
+            message: `${data.studentName} (${data.studentClass}): ${data.violation?.message || data.violation?.type}`,
+            timestamp: new Date().toLocaleTimeString('id-ID'),
+            studentName: data.studentName
+          });
+        }
+
+        if (eventType === 'SUBMISSION_UPDATED') {
+          setSubmissions((prev) => prev.map((s) => (s.id === data.submission.id ? data.submission : s)));
+        }
+
+        if (eventType === 'SUBMISSION_DELETED') {
+          setSubmissions((prev) => prev.filter((s) => s.id !== data.id));
+          setActiveStudents((prev) => prev.filter((s) => s.submissionId !== data.id));
+        }
+
+        if (eventType === 'SUBMISSIONS_RESET') {
+          setSubmissions(data.data || []);
+          setActiveStudents([]);
+        }
+      },
+      (isConnected: boolean) => {
+        setRealtimeConnected(isConnected);
+      }
+    );
+
+    // Fallback polling every 8s in case SSE is interrupted or behind proxies
+    const pollingInterval = setInterval(async () => {
+      try {
+        const [data, actives] = await Promise.all([
+          ApiService.getSubmissions(),
+          ApiService.getActiveStudents()
+        ]);
+        if (Array.isArray(data)) setSubmissions(data);
+        if (Array.isArray(actives)) setActiveStudents(actives);
+        setLastSyncTime(new Date().toLocaleTimeString('id-ID'));
+      } catch (e) {
+        // Non-blocking
+      }
+    }, 8000);
+
+    return () => {
+      unsubscribe();
+      clearInterval(pollingInterval);
+    };
+  }, [playSubmissionSound, addNotification]);
 
   // Compute Overall Stats
   const stats: ExamStats = useMemo(() => {
@@ -257,10 +442,42 @@ export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
         </div>
 
         <div className="flex items-center space-x-2 sm:space-x-3">
+          {/* Live Realtime Indicator */}
+          <div className="flex items-center space-x-2 px-2.5 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${realtimeConnected ? 'bg-emerald-400' : 'bg-amber-400'} opacity-75`}></span>
+              <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${realtimeConnected ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
+            </span>
+            <span className={`font-semibold hidden sm:inline ${realtimeConnected ? 'text-emerald-400' : 'text-amber-400'}`}>
+              {realtimeConnected ? 'Realtime Aktif' : 'Menghubungkan...'}
+            </span>
+            {activeStudents.length > 0 && (
+              <>
+                <span className="text-slate-500 hidden sm:inline">•</span>
+                <span className="text-blue-400 font-mono text-[11px] font-bold animate-pulse">
+                  {activeStudents.length} Mengisi
+                </span>
+              </>
+            )}
+          </div>
+
+          {/* Sound Notification Chime Toggle */}
+          <button
+            onClick={() => setSoundEnabled(!soundEnabled)}
+            className={`p-2 rounded-lg border transition ${
+              soundEnabled
+                ? 'bg-blue-600/20 text-blue-300 border-blue-500/30 hover:bg-blue-600/30'
+                : 'bg-slate-800 text-slate-500 border-slate-700 hover:text-slate-300'
+            }`}
+            title={soundEnabled ? 'Suara notifikasi aktif (klik untuk membisukan)' : 'Suara notifikasi nonaktif (klik untuk mengaktifkan)'}
+          >
+            {soundEnabled ? <Volume2 className="w-4 h-4 text-blue-400" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
+          </button>
+
           <button
             onClick={loadSubmissions}
             className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition"
-            title="Segarkan Data"
+            title={`Segarkan Data (Sinkron: ${lastSyncTime})`}
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -271,7 +488,7 @@ export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
             className="flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition"
           >
             <Download className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Ekspor Excel (CSV)</span>
+            <span className="hidden sm:inline">Ekspor Excel</span>
           </a>
 
           <button
@@ -378,6 +595,98 @@ export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
         {/* TAB 1: REKAPITULASI NILAI */}
         {activeTab === 'REKAP' && (
           <div className="space-y-4">
+            {/* Live Realtime Active Students Monitor */}
+            {activeStudents.length > 0 ? (
+              <div className="bg-gradient-to-r from-blue-950/60 via-slate-900 to-indigo-950/60 border border-blue-500/40 rounded-2xl p-4 shadow-xl">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-3 border-b border-blue-900/40">
+                  <div className="flex items-center space-x-2.5">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                    </span>
+                    <h3 className="text-sm font-extrabold text-white flex items-center space-x-2">
+                      <span>Siswa Sedang Mengerjakan Ujian (Live Realtime)</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs bg-blue-500/20 text-blue-300 border border-blue-500/40 font-mono font-bold">
+                        {activeStudents.length} Siswa Aktif
+                      </span>
+                    </h3>
+                  </div>
+                  <span className="text-[11px] text-slate-400 font-mono">
+                    ● Data otomatis terupdate tiap kali siswa memilih/mengisi jawaban
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {activeStudents.map((st) => {
+                    const progressPercent = Math.round((st.totalAnswered / 15) * 100);
+                    return (
+                      <div
+                        key={st.submissionId}
+                        className="bg-slate-900/90 border border-slate-700/80 rounded-xl p-3.5 shadow-sm hover:border-blue-500/60 transition group"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <span className="font-bold text-sm text-white block group-hover:text-blue-300 transition">
+                              {st.studentName}
+                            </span>
+                            <span className="text-[11px] text-slate-400 font-mono">
+                              No. Absen: {st.studentNumber || '-'}
+                            </span>
+                          </div>
+                          <span className="text-[11px] px-2 py-0.5 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30 font-semibold">
+                            {st.studentClass}
+                          </span>
+                        </div>
+
+                        <div className="mt-3 space-y-2">
+                          <div className="flex items-center justify-between text-xs text-slate-300">
+                            <span className="flex items-center space-x-1.5 text-slate-300 font-medium">
+                              <Activity className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
+                              <span>
+                                {st.currentSection === 'PG'
+                                  ? `Soal PG No. ${st.currentQuestion}`
+                                  : `Soal Essay No. ${Math.max(1, st.currentQuestion - 10)}`}
+                              </span>
+                            </span>
+                            <span className="font-mono font-extrabold text-blue-400">
+                              {st.totalAnswered} / 15 Soal ({progressPercent}%)
+                            </span>
+                          </div>
+
+                          {/* Progress bar */}
+                          <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700/50">
+                            <div
+                              className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-teal-400 transition-all duration-300"
+                              style={{ width: `${Math.min(100, Math.max(5, progressPercent))}%` }}
+                            />
+                          </div>
+
+                          <div className="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
+                            <span>PG: {st.answeredPgCount}/10 • Essay: {st.answeredEssayCount}/5</span>
+                            <span className="inline-flex items-center space-x-1 text-teal-400 font-semibold">
+                              <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-ping"></span>
+                              <span>Sedang Mengisi</span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div className="bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs text-slate-400 shadow-sm">
+                <div className="flex items-center space-x-2">
+                  <span className="relative flex h-2 w-2">
+                    <span className="inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-slate-300 font-semibold">Sinkronisasi Realtime Terhubung</span>
+                  <span className="text-slate-500 hidden md:inline">— Setiap siswa yang mulai mengerjakan atau mengirim jawaban akan muncul seketika tanpa perlu refresh halaman.</span>
+                </div>
+                <span className="font-mono text-[11px] text-slate-500">Update Terakhir: {lastSyncTime}</span>
+              </div>
+            )}
+
             {/* Filter and Search Bar */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 shadow-md">
               <div className="relative flex-1">
@@ -457,18 +766,34 @@ export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
                         </td>
                       </tr>
                     ) : (
-                      filteredSubmissions.map((sub, idx) => (
-                        <tr key={sub.id} className="hover:bg-slate-800/40 transition">
-                          <td className="py-3.5 px-4 font-mono text-slate-400">{idx + 1}</td>
-                          <td className="py-3.5 px-4">
-                            <span className="font-bold text-white block">{sub.studentName}</span>
-                            <span className="text-[10px] text-slate-500 font-mono">{sub.id}</span>
-                          </td>
-                          <td className="py-3.5 px-4">
-                            <span className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono text-xs text-slate-300">
-                              {sub.studentClass} ({sub.studentNumber || '-'})
-                            </span>
-                          </td>
+                      filteredSubmissions.map((sub, idx) => {
+                        const isRecent = sub.id === recentSubmittedId;
+                        return (
+                          <tr
+                            key={sub.id}
+                            className={`transition-all duration-500 ${
+                              isRecent
+                                ? 'bg-emerald-950/70 border-y border-emerald-500/60 shadow-inner'
+                                : 'hover:bg-slate-800/40'
+                            }`}
+                          >
+                            <td className="py-3.5 px-4 font-mono text-slate-400">{idx + 1}</td>
+                            <td className="py-3.5 px-4">
+                              <div className="flex items-center space-x-2">
+                                <span className="font-bold text-white block">{sub.studentName}</span>
+                                {isRecent && (
+                                  <span className="px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-wider animate-bounce shadow">
+                                    Baru Masuk!
+                                  </span>
+                                )}
+                              </div>
+                              <span className="text-[10px] text-slate-500 font-mono">{sub.id}</span>
+                            </td>
+                            <td className="py-3.5 px-4">
+                              <span className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono text-xs text-slate-300">
+                                {sub.studentClass} ({sub.studentNumber || '-'})
+                              </span>
+                            </td>
                           <td className="py-3.5 px-4 text-center font-mono font-bold text-blue-400">
                             {sub.pgScore}
                           </td>
@@ -526,8 +851,8 @@ export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
                             </button>
                           </td>
                         </tr>
-                      ))
-                    )}
+                      );
+                    }))}
                   </tbody>
                 </table>
               </div>
@@ -914,6 +1239,42 @@ export const AdminDashboard: React.FC<Props> = ({ onLogout }) => {
           </div>
         </div>
       )}
+
+      {/* Real-time Floating Notification Toasts */}
+      <div className="fixed bottom-5 right-5 z-50 flex flex-col space-y-2.5 max-w-sm w-full pointer-events-none">
+        {liveNotifications.map((notif) => (
+          <div
+            key={notif.id}
+            className={`pointer-events-auto p-4 rounded-2xl shadow-2xl border flex items-start space-x-3 transition-all duration-300 backdrop-blur-md ${
+              notif.type === 'SUBMISSION'
+                ? 'bg-slate-900/95 border-emerald-500/60 shadow-emerald-950/60 text-white'
+                : notif.type === 'VIOLATION'
+                ? 'bg-slate-900/95 border-rose-500/60 shadow-rose-950/60 text-white'
+                : 'bg-slate-900/95 border-blue-500/60 shadow-blue-950/60 text-white'
+            }`}
+          >
+            <div className="mt-0.5 flex-shrink-0">
+              {notif.type === 'SUBMISSION' && <CheckCircle className="w-5 h-5 text-emerald-400" />}
+              {notif.type === 'VIOLATION' && <ShieldAlert className="w-5 h-5 text-rose-400" />}
+              {notif.type === 'STARTED' && <Activity className="w-5 h-5 text-blue-400 animate-pulse" />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-bold text-slate-100 truncate">{notif.title}</h4>
+                <span className="text-[10px] text-slate-400 font-mono ml-2 flex-shrink-0">{notif.timestamp}</span>
+              </div>
+              <p className="text-xs text-slate-300 mt-1 leading-relaxed break-words">{notif.message}</p>
+            </div>
+            <button
+              onClick={() => setLiveNotifications((prev) => prev.filter((n) => n.id !== notif.id))}
+              className="text-slate-500 hover:text-white p-0.5 transition flex-shrink-0"
+              title="Tutup Notifikasi"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

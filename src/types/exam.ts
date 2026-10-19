@@ -65,3 +65,27 @@ export interface ExamStats {
   totalViolationsRecorded: number;
   studentsWithViolations: number;
 }
+
+export interface ActiveExamStudent {
+  submissionId: string;
+  studentName: string;
+  studentClass: string;
+  studentNumber: string;
+  startedAt: string;
+  lastActiveAt: string;
+  answeredPgCount: number;
+  answeredEssayCount: number;
+  totalAnswered: number;
+  currentSection: 'PG' | 'ESSAY';
+  currentQuestion: number;
+}
+
+export interface LiveRealtimeNotification {
+  id: string;
+  type: 'SUBMISSION' | 'STARTED' | 'PROGRESS' | 'VIOLATION' | 'INFO';
+  title: string;
+  message: string;
+  timestamp: string;
+  studentName?: string;
+  score?: number;
+}

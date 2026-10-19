@@ -130,6 +130,39 @@ export const ExamScreen: React.FC<Props> = ({ student, onFinishExam }) => {
     }
   }, []);
 
+  // Notify server that student started exam
+  useEffect(() => {
+    ApiService.notifyStudentStarted({
+      submissionId: submissionIdRef.current,
+      studentName: student.name,
+      studentClass: student.studentClass,
+      studentNumber: student.studentNumber
+    });
+  }, [student]);
+
+  // Sync answer progress with backend in real-time as student answers
+  useEffect(() => {
+    const answeredPgCount = Object.keys(answers.pg).length;
+    const answeredEssayCount = Object.values(answers.essay).filter(
+      (text) => typeof text === 'string' && text.trim().length > 0
+    ).length;
+
+    const timer = setTimeout(() => {
+      ApiService.sendStudentProgress({
+        submissionId: submissionIdRef.current,
+        studentName: student.name,
+        studentClass: student.studentClass,
+        studentNumber: student.studentNumber,
+        answeredPgCount,
+        answeredEssayCount,
+        currentSection,
+        currentQuestion: currentSection === 'PG' ? currentQuestionIndex + 1 : currentQuestionIndex + 11
+      });
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [answers, currentSection, currentQuestionIndex, student]);
+
   useEffect(() => {
     enterFullscreen();
 
