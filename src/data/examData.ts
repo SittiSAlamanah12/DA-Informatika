@@ -136,17 +136,17 @@ export const MULTIPLE_CHOICE_QUESTIONS: MultipleChoiceQuestion[] = [
   },
   {
     id: 6,
-    question: "Fungsi yang digunakan untuk mencari nilai terkecil dari suatu kumpulan data adalah....",
+    question: "Pertemuan antara baris (row) dan kolom (column) pada spreadsheet adalah....",
     options: [
-      { key: "A", text: "MAX" },
-      { key: "B", text: "AVERAGE" },
-      { key: "C", text: "MIN" },
-      { key: "D", text: "SUMIF" }
+      { key: "A", text: "Baris (Row)" },
+      { key: "B", text: "Sel (Cell)" },
+      { key: "C", text: "Kolom (Column)" },
+      { key: "D", text: "Range" }
     ],
-    correctAnswer: "C",
-    explanation: "Fungsi MIN (singkatan dari Minimum) digunakan untuk mencari atau mengembalikan nilai numerik paling kecil/rendah dari sekumpulan data.",
-    category: "Fungsi Statistik Dasar",
-    source: "Buku Siswa Informatika Hal. 28 No. 6"
+    correctAnswer: "B",
+    explanation: "Pertemuan antara baris (horizontal) dan kolom (vertikal) pada lembar kerja (spreadsheet) dinamakan Sel (Cell), sebagai contoh pertemuan kolom A dan baris 1 dinamakan sel A1.",
+    category: "Konsep Dasar Lembar Kerja",
+    source: "Buku Siswa Informatika Bab 1"
   },
   {
     id: 7,
@@ -223,16 +223,16 @@ export const ESSAY_QUESTIONS: EssayQuestion[] = [
   },
   {
     id: 2,
-    question: "Jelaskan langkah-langkah untuk menyusun jadwal kegiatan harian yang efektif dan teratur!",
-    sampleAnswer: "Langkah-langkah menyusun jadwal efektif: 1) Menginventarisasi/mencatat semua daftar kegiatan yang harus diselesaikan, 2) Menentukan skala prioritas (kegiatan penting dan mendesak didahulukan), 3) Mengalokasikan perkiraan durasi waktu secara realistis termasuk waktu istirahat, 4) Menyusun urutan kegiatan secara terstruktur dan fleksibel, 5) Mengevaluasi dan berkomitmen menjalankan jadwal.",
-    keywords: ["daftar kegiatan", "prioritas", "alokasi waktu", "durasi", "istirahat", "urutan", "evaluasi", "jadwal"],
+    question: "Jelaskan langkah-langkah membuat dan merapikan tabel data siswa serta nilai informatika pada spreadsheet (seperti Microsoft Excel atau Google Sheets)!",
+    sampleAnswer: "Langkah-langkah membuat dan merapikan tabel data siswa dan nilai informatika:\n1) Membuka aplikasi spreadsheet (Microsoft Excel atau Google Sheets) dan membuat dokumen baru (Blank Workbook).\n2) Menuliskan judul-judul kolom pada baris pertama (misal: sel A1: Nama Siswa, B1: Kelas, C1: Nilai Informatika, D1: Tanggal Ujian, E1: Status Kelulusan).\n3) Menginput data nama-nama siswa dan perolehan nilai informatika pada baris-baris berikutnya secara urut dan teliti.\n4) Mengatur lebar kolom (klik ganda batas kepala kolom) agar teks dan angka terbaca jelas tanpa terpotong.\n5) Memformat tabel agar rapi dan menarik: menebalkan judul kolom (ikon Bold), memberi garis tabel (Borders / All Borders), serta memberi warna latar belakang judul kolom (Fill Color).",
+    keywords: ["buka", "excel", "sheets", "lembar kerja", "judul kolom", "nama siswa", "nilai", "lebar kolom", "bold", "tebal", "border", "garis", "fill color", "warna"],
     maxScore: 20,
     scoringGuide: {
-      fullCriteria: "Menjelaskan runtutan langkah logis: mendata kegiatan, menentukan skala prioritas, alokasi waktu/istirahat, dan penyusunan serta evaluasi.",
-      partialCriteria: "Menyebutkan 2-3 langkah logis namun belum lengkap.",
-      minimalCriteria: "Hanya menjelaskan satu langkah secara singkat tanpa runtutan jelas."
+      fullCriteria: "Menjelaskan langkah runtut dan terstruktur: membuka aplikasi/dokumen baru, memasukkan judul kolom & data nilai siswa, mengatur lebar kolom, serta memberi format rapi (bold, border, fill color).",
+      partialCriteria: "Menjelaskan sebagian langkah pembuatan tabel dan beberapa pemformatan.",
+      minimalCriteria: "Penjelasan sangat singkat hanya menyebut mengetik data tanpa pemformatan tabel."
     },
-    explanation: "Penyusunan jadwal menerapkan dekomposisi masalah dan perancangan algoritma penjadwalan agar kegiatan harian optimal."
+    explanation: "Menguji keterampilan praktis pengolahan data lembar kerja dalam pembuatan struktur tabel, input data, dan pemformatan sel agar rapi dan informatif."
   },
   {
     id: 3,

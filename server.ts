@@ -29,10 +29,10 @@ const initialSampleSubmissions = [
     finishedAt: new Date(Date.now() - 3600000 * 1.5).toISOString(),
     durationSeconds: 1820,
     answers: {
-      pg: { 1: "A", 2: "B", 3: "D", 4: "C", 5: "D", 6: "C", 7: "B", 8: "B", 9: "C", 10: "B" },
+      pg: { 1: "A", 2: "B", 3: "D", 4: "C", 5: "D", 6: "B", 7: "B", 8: "B", 9: "C", 10: "B" },
       essay: {
         1: "Data yang diperlukan: nama kegiatan harian, waktu pelaksanaan (jam dan hari), tempat berlangsungnya acara, penanggung jawab, serta perlengkapan.",
-        2: "Langkah-langkah: 1) Membuat daftar seluruh kegiatan harian. 2) Menentukan skala prioritas. 3) Mengatur alokasi waktu dan istirahat. 4) Menyusun secara teratur dan konsisten mengevaluasi.",
+        2: "Langkah-langkah: 1) Buka aplikasi Excel/Sheets dan buat dokumen Blank baru. 2) Tulis judul kolom di baris pertama A1:E1. 3) Masukkan data nama siswa dan nilai informatika. 4) Rapikan tabel dengan mengatur lebar kolom, beri All Borders, dan tebalkan judul kolom dengan Bold serta Fill Color.",
         3: "Fungsi dasar: SUM untuk menjumlahkan seluruh angka, COUNT untuk menghitung sel berisi angka, COUNTA untuk sel tidak kosong, SUMIF untuk menjumlahkan dengan kriteria tertentu, dan COUNTIF untuk menghitung jumlah sel dengan syarat kriteria.",
         4: "Fungsi statistik: 1) AVERAGE untuk menghitung nilai rata-rata dari data angka. 2) MAX untuk mencari nilai angka tertinggi dalam rentang data. 3) MIN untuk mencari nilai terendah dari rentang data.",
         5: "Fungsi logika: AND menghasilkan TRUE jika semua kondisi benar, OR menghasilkan TRUE jika minimal salah satu kondisi benar, dan NOT membalikkan nilai logika dari TRUE jadi FALSE atau sebaliknya."
@@ -65,7 +65,7 @@ const initialSampleSubmissions = [
     finishedAt: new Date(Date.now() - 3600000 * 0.8).toISOString(),
     durationSeconds: 1540,
     answers: {
-      pg: { 1: "A", 2: "B", 3: "A", 4: "C", 5: "D", 6: "C", 7: "B", 8: "B", 9: "C", 10: "B" },
+      pg: { 1: "A", 2: "B", 3: "A", 4: "C", 5: "D", 6: "B", 7: "B", 8: "B", 9: "C", 10: "B" },
       essay: {
         1: "Perlu nama kegiatan, jam mulai, dan tempat pelaksanaan.",
         2: "Menulis apa yang mau dikerjakan lalu memberi waktu untuk setiap tugas.",
